@@ -2,6 +2,8 @@ from flask import Blueprint, jsonify, request
 
 from src.services.post.postLogin import postLogin
 from src.services.post.postRegister import postRegister
+from src.services.get.getCuestionarios import getCuestionarios
+from src.services.post.postObtenerCuestionario import postObtenerCuestionario
 
 from src.models.Paciente import Paciente
 
@@ -34,6 +36,30 @@ def register():
     registrado = postRegister(nom_comp, direc, email, contra)
     if(registrado):
       return jsonify({'message':'COMPLETE', 'success':True})
+    else:
+      return jsonify({'message':'NOT FOUND', 'success':True})
+  except Exception as e:
+    return jsonify({'message':'ERROR', 'success':False})
+
+@main.route("/cuestionarios")
+def cuestionarios():
+  try:
+    cuestionarios = getCuestionarios()
+    if(cuestionarios!=''):
+      return jsonify({'message':'COMPLETE', 'success':True, 'data':cuestionarios})
+    else:
+      return jsonify({'message':'NOT FOUND', 'success':True})
+  except Exception as e:
+    return jsonify({'message':'ERROR', 'success':False})
+
+@main.route("/cuestionarioCompleto", methods = ['POST'])
+def cuestionario():
+  try:
+    data = request.get_json()
+    id_cuest = data['id_cuest']
+    cuestionario = postObtenerCuestionario(id_cuest)
+    if(cuestionario!=''):
+      return jsonify({'message':'COMPLETE', 'success':True, 'data':cuestionario})
     else:
       return jsonify({'message':'NOT FOUND', 'success':True})
   except Exception as e:

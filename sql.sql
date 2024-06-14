@@ -346,6 +346,7 @@ SELECT PAC.* FROM Paciente PAC
 -- Registro de paciente
 INSERT INTO Paciente (nom_comp, direc, email, contra)
 	VALUES	('Estefano Puerta Trelo', 'Av. Peru', 'epuerta@gmail.com', 'epuerta');
+select * from paciente;
 
 -- Obtener cuestionarios
 SELECT CUEST.* FROM Cuestionario CUEST;
@@ -354,3 +355,51 @@ SELECT CUEST.* FROM Cuestionario CUEST;
 SELECT PREG.* FROM Pregunta PREG, Cuest_Preg CPREG
 	WHERE CPREG.id_preg = PREG.id_preg
 		AND CPREG.id_cuest = '101';
+
+-- Guardar test del usuario
+-- Requiere id_cuest, todos los id_preg, todas las respuestas
+DO $$
+DECLARE
+    nuevo_id_cuest_det INT;
+	--nuevo_id_exp INT;
+BEGIN
+    -- Insertar nuevo cuest_det
+    INSERT INTO Cuest_Det(fecha, id_cuest)
+		VALUES	(TO_DATE(CURRENT_DATE::text, 'YYYY-MM-DD'), '100')
+		RETURNING id_cuest_det INTO nuevo_id_cuest_det;
+	
+	INSERT INTO Det_Preg(puntuacion, id_preg, id_cuest_det)
+		VALUES	('2', 601, nuevo_id_cuest_det),
+				('3', 602, nuevo_id_cuest_det),
+				('4', 603, nuevo_id_cuest_det),
+				('1', 604, nuevo_id_cuest_det),
+				('2', 605, nuevo_id_cuest_det),
+				('3', 606, nuevo_id_cuest_det),
+				('4', 607, nuevo_id_cuest_det),
+				('1', 608, nuevo_id_cuest_det),
+				('1', 609, nuevo_id_cuest_det),
+				('1', 610, nuevo_id_cuest_det),
+				('2', 611, nuevo_id_cuest_det),
+				('2', 612, nuevo_id_cuest_det),
+				('3', 613, nuevo_id_cuest_det),
+				('3', 614, nuevo_id_cuest_det),
+				('2', 615, nuevo_id_cuest_det),
+				('4', 616, nuevo_id_cuest_det),
+				('4', 617, nuevo_id_cuest_det),
+				('1', 618, nuevo_id_cuest_det),
+				('2', 619, nuevo_id_cuest_det);
+	
+	--INSERT INTO Expediente(fecha_creacion, estado)
+	--	VALUES 	(TO_DATE(CURRENT_DATE::text), 'Abierto')
+	--	RETURNING id_exp INTO nuevo_id_exp;
+	
+	--INSERT INTO Exp_Cuest_Det
+	
+	
+END $$;
+
+-- Ver todos los cuest_det
+select * from cuest_det;
+
+-- Ver preguntas por un cuestionario detalle
+SELECT * from Det_Preg WHERE id_cuest_det = 200002;
